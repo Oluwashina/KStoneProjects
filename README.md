@@ -18,7 +18,7 @@ plus `/api/enquiry`, `sitemap.xml`, `robots.txt`, Open Graph/Twitter images and 
 
 | What | File |
 | --- | --- |
-| Email, phone, address, LinkedIn & social URLs, CEO portrait | `src/data/site.ts` (every `null` is a labelled placeholder in the UI) |
+| Email, phones, office addresses, LinkedIn & social URLs, CEO portrait | `src/data/site.ts` (social links and portrait still use `null` until supplied) |
 | Services & categories | `src/data/services.ts` |
 | Projects (empty until verified records are supplied) | `src/data/projects.ts` |
 | Sectors, approach, values, partner types | `src/data/content.ts` |

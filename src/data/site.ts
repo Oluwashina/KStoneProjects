@@ -19,12 +19,18 @@ export const site = {
   copyrightYear: 2026,
 
   contact: {
-    /** e.g. "info@yourdomain.com" */
-    email: null as string | null,
-    /** e.g. "+234 000 000 0000" */
-    phone: null as string | null,
-    /** e.g. { lines: ["Street", "City", "State, Nigeria"] } */
-    address: null as { lines: string[] } | null,
+    email: "kstoneprojectslimited@gmail.com",
+    phones: ["0806 344 4584", "0802 658 3587"],
+    addresses: [
+      {
+        label: "Ogun State",
+        lines: ["24, Pavilion Blu Road", "Maba, Aseese", "Ogun State, Nigeria"],
+      },
+      {
+        label: "Lagos State",
+        lines: ["3, Omojuwa Estate", "Kosofe, Ketu", "Lagos State, Nigeria"],
+      },
+    ],
   },
 
   social: {

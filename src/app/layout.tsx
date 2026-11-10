@@ -68,7 +68,20 @@ const jsonLd = {
       areaServed: "Nigeria",
       founder: { "@id": `${site.url}/leadership#person` },
       ...(site.contact.email ? { email: site.contact.email } : {}),
-      ...(site.contact.phone ? { telephone: site.contact.phone } : {}),
+      ...(site.contact.phones.length
+        ? { telephone: site.contact.phones.map((p) => p.replace(/\s/g, "")).join(", ") }
+        : {}),
+      ...(site.contact.addresses.length
+        ? {
+            address: site.contact.addresses.map((a) => ({
+              "@type": "PostalAddress",
+              streetAddress: a.lines[0],
+              addressLocality: a.lines[1],
+              addressRegion: a.label,
+              addressCountry: "NG",
+            })),
+          }
+        : {}),
       ...(site.social.linkedinCompany ? { sameAs: [site.social.linkedinCompany] } : {}),
     },
     {

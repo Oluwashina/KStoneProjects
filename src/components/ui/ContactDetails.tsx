@@ -15,8 +15,13 @@ const Pending = ({ children }: { children: ReactNode }) => (
 
 type Tone = "dark" | "light";
 
+function telHref(display: string) {
+  const digits = display.replace(/\D/g, "");
+  return digits.startsWith("0") ? `tel:+234${digits.slice(1)}` : `tel:${digits}`;
+}
+
 export function ContactList({ tone = "dark", className }: { tone?: Tone; className?: string }) {
-  const { email, phone, address } = site.contact;
+  const { email, phones, addresses } = site.contact;
   const iconCls = cn("mt-1 size-[1.05rem] shrink-0", tone === "dark" ? "text-[#8fb4f2]" : "text-brand");
   const linkCls = cn(
     "underline-offset-4 transition-colors hover:underline",
@@ -42,10 +47,21 @@ export function ContactList({ tone = "dark", className }: { tone?: Tone; classNa
         <Phone className={iconCls} aria-hidden />
         <div>
           <p className="ui-label opacity-60">Telephone</p>
-          {phone ? (
-            <a href={`tel:${phone.replace(/\s/g, "")}`} className={linkCls}>
-              {phone}
-            </a>
+          {phones.length ? (
+            <p className="flex flex-wrap items-center gap-x-2 gap-y-1">
+              {phones.map((phone, i) => (
+                <span key={phone} className="inline-flex items-center gap-2">
+                  {i > 0 ? (
+                    <span aria-hidden className="text-concrete">
+                      |
+                    </span>
+                  ) : null}
+                  <a href={telHref(phone)} className={linkCls}>
+                    {phone}
+                  </a>
+                </span>
+              ))}
+            </p>
           ) : (
             <Pending>Nigerian phone number — to be confirmed</Pending>
           )}
@@ -54,15 +70,20 @@ export function ContactList({ tone = "dark", className }: { tone?: Tone; classNa
       <li className="flex gap-3">
         <MapPin className={iconCls} aria-hidden />
         <div>
-          <p className="ui-label opacity-60">Office</p>
-          {address ? (
-            <address className="not-italic">
-              {address.lines.map((l) => (
-                <span key={l} className="block">
-                  {l}
-                </span>
+          <p className="ui-label opacity-60">{addresses.length > 1 ? "Offices" : "Office"}</p>
+          {addresses.length ? (
+            <div className="space-y-4">
+              {addresses.map((entry) => (
+                <address key={entry.label} className="not-italic">
+                  {addresses.length > 1 ? <span className="ui-label mb-1 block text-[0.7rem] opacity-70">{entry.label}</span> : null}
+                  {entry.lines.map((l) => (
+                    <span key={l} className="block">
+                      {l}
+                    </span>
+                  ))}
+                </address>
               ))}
-            </address>
+            </div>
           ) : (
             <Pending>Office address — to be confirmed</Pending>
           )}

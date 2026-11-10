@@ -79,12 +79,6 @@ export function Footer() {
           <p>
             © {site.copyrightYear} {site.name}. All rights reserved.
           </p>
-          <p className="max-w-xl lg:text-right">
-            Photography on this website is illustrative and does not depict Kstone Projects work.{" "}
-            <Link href="/credits" className="underline underline-offset-4 hover:text-white">
-              Image credits
-            </Link>
-          </p>
         </div>
       </div>
     </footer>
