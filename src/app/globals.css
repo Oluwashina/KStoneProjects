@@ -1,26 +1,284 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
+/* -------------------------------------------------------------------------
+   Kstone Projects Limited — design tokens
+   Brand blue is sampled from the supplied logo artwork (#0155CF).
+   ------------------------------------------------------------------------- */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-brand: #0155cf;
+  --color-brand-600: #0145a8;
+  --color-brand-700: #013786;
+  --color-brand-50: #eaf1fc;
+  --color-navy: #10233f;
+  --color-navy-900: #0b1a30;
+  --color-graphite: #252a30;
+  --color-arch: #f4f6f9;
+  --color-concrete: #a7b0bd;
+  /* Slate is a darker concrete tone that keeps AA contrast for text on white / arch. */
+  --color-slate: #566170;
+  --color-line: #dde2ea;
+
+  --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+  --font-ui: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-instrument), "Times New Roman", serif;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+:root {
+  --header-h: 76px;
+  color-scheme: light;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--header-h) + 24px);
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: #fff;
+  color: var(--color-graphite);
+  font-family: var(--font-sans);
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--color-brand);
+  color: #fff;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+.on-dark :focus-visible {
+  outline-color: #fff;
+}
+
+/* -------------------------------------------------------------------------
+   Type system
+   ------------------------------------------------------------------------- */
+@layer components {
+  .container-x {
+    width: 100%;
+    max-width: 1400px;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+  @media (min-width: 768px) {
+    .container-x {
+      padding-inline: 2rem;
+    }
+  }
+  @media (min-width: 1280px) {
+    .container-x {
+      padding-inline: 3rem;
+    }
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-family: var(--font-ui);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-brand);
+  }
+  .eyebrow::before {
+    content: "";
+    width: 1.75rem;
+    height: 2px;
+    background: currentColor;
+    flex: none;
+  }
+  .on-dark .eyebrow {
+    color: #8fb4f2;
+  }
+
+  .display {
+    font-weight: 600;
+    letter-spacing: -0.035em;
+    line-height: 1.02;
+    font-size: clamp(2.6rem, 6.4vw, 5.75rem);
+    text-wrap: balance;
+  }
+  .h1 {
+    font-weight: 600;
+    letter-spacing: -0.032em;
+    line-height: 1.04;
+    font-size: clamp(2.3rem, 5vw, 4.5rem);
+    text-wrap: balance;
+  }
+  .h2 {
+    font-weight: 600;
+    letter-spacing: -0.028em;
+    line-height: 1.08;
+    font-size: clamp(1.9rem, 3.6vw, 3.25rem);
+    text-wrap: balance;
+  }
+  .h3 {
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    font-size: clamp(1.35rem, 2vw, 1.75rem);
+  }
+  .lead {
+    font-size: clamp(1.1rem, 1.5vw, 1.3rem);
+    line-height: 1.6;
+    color: var(--color-slate);
+  }
+  .on-dark .lead {
+    color: rgb(255 255 255 / 0.78);
+  }
+  .serif-accent {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+  .ui-label {
+    font-family: var(--font-ui);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+
+  .select-chevron {
+    appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%23566170' stroke-width='2'><path d='m3 6 5 5 5-5'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 16px;
+  }
+
+  /* Architectural drafting grid used for placeholder states */
+  .blueprint-grid {
+    background-color: var(--color-navy);
+    background-image:
+      linear-gradient(rgb(255 255 255 / 0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(255 255 255 / 0.06) 1px, transparent 1px),
+      linear-gradient(rgb(255 255 255 / 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(255 255 255 / 0.03) 1px, transparent 1px);
+    background-size: 80px 80px, 80px 80px, 16px 16px, 16px 16px;
+  }
+  .blueprint-grid-light {
+    background-color: var(--color-arch);
+    background-image:
+      linear-gradient(rgb(16 35 63 / 0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(16 35 63 / 0.06) 1px, transparent 1px);
+    background-size: 56px 56px;
+  }
+}
+
+/* -------------------------------------------------------------------------
+   Motion — restrained, progressive-enhancement only
+   Elements stay visible if JavaScript is unavailable (.js class is added by an
+   inline script in <head>).
+   ------------------------------------------------------------------------- */
+.js .reveal {
+  opacity: 0;
+  transform: translate3d(0, 28px, 0);
+  transition:
+    opacity 0.9s var(--ease-out-expo),
+    transform 0.9s var(--ease-out-expo);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+.js .reveal.is-in {
+  opacity: 1;
+  transform: none;
+  will-change: auto;
+}
+
+/* Image reveal: the inner layer is clipped (the observed wrapper is not, so
+   IntersectionObserver still fires) and the photograph settles as it opens. */
+.js .img-reveal > .img-reveal-inner {
+  clip-path: inset(0 0 100% 0);
+  transition: clip-path 1.2s var(--ease-out-expo);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+.js .img-reveal .img-reveal-inner img {
+  transform: scale(1.12);
+  transition: transform 1.8s var(--ease-out-expo);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+.js .img-reveal.is-in > .img-reveal-inner {
+  clip-path: inset(0 0 0 0);
+}
+.js .img-reveal.is-in .img-reveal-inner img {
+  transform: scale(1);
+}
+
+@keyframes hero-settle {
+  from {
+    transform: scale(1.08);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+.hero-settle {
+  animation: hero-settle 2.6s var(--ease-out-expo) both;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 24px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.rise {
+  animation: rise 1s var(--ease-out-expo) both;
+  animation-delay: var(--rise-delay, 0ms);
+}
+
+@keyframes marquee-line {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+.draw-line {
+  transform-origin: left;
+  animation: marquee-line 1.4s var(--ease-out-expo) both;
+  animation-delay: var(--rise-delay, 400ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .js .reveal,
+  .js .img-reveal > .img-reveal-inner,
+  .js .img-reveal .img-reveal-inner img {
+    opacity: 1 !important;
+    transform: none !important;
+    clip-path: none !important;
+    transition: none !important;
+  }
+  .hero-settle,
+  .rise,
+  .draw-line {
+    animation: none !important;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+  }
 }
