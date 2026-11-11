@@ -1,19 +1,15 @@
-import { emptyEnquiry, serviceOptions, validateEnquiry, type EnquiryFields } from "@/lib/validation";
+import { buildEnquiryPayload, gmailSmtpConfigured, sendEnquiryViaGmail } from "@/lib/enquiry-mail";
+import { emptyEnquiry, validateEnquiry, type EnquiryFields } from "@/lib/validation";
 
 /**
  * POST /api/enquiry
  *
- * Validates a business enquiry on the server (never trust the client) and
- * hands it to a delivery channel.
+ * Validates on the server and delivers internally:
+ *   1. Gmail SMTP when GMAIL_USER + GMAIL_APP_PASSWORD are set (see .env.example)
+ *   2. Else ENQUIRY_WEBHOOK_URL if set
+ *   3. Else console log in development only
  *
- * Delivery is intentionally pluggable so no backend is needed to launch:
- *   • Set ENQUIRY_WEBHOOK_URL to forward each enquiry as JSON to Zapier, Make,
- *     Formspree, Slack, an email API proxy, a CMS, etc.
- *   • Swap `deliver()` for a direct integration (Resend, SendGrid, SMTP, CRM…).
- *
- * In development, enquiries are logged to the server console. In production, if
- * no delivery channel is configured the route responds with 503 rather than
- * pretending the enquiry was sent.
+ * Production returns 503 if no channel is configured — enquiries are never faked as sent.
  */
 
 const MAX_BODY_BYTES = 16_000;
@@ -23,22 +19,14 @@ function json(body: unknown, status = 200) {
 }
 
 async function deliver(enquiry: EnquiryFields): Promise<"sent" | "logged" | "unconfigured"> {
-  const webhook = process.env.ENQUIRY_WEBHOOK_URL;
-  const serviceLabel = serviceOptions.find((o) => o.value === enquiry.service)?.label ?? enquiry.service;
-  const payload = {
-    receivedAt: new Date().toISOString(),
-    type: enquiry.kind,
-    fullName: enquiry.fullName.trim(),
-    organisation: enquiry.organisation.trim(),
-    email: enquiry.email.trim(),
-    phone: enquiry.phone.trim(),
-    subject: enquiry.subject.trim(),
-    service: serviceLabel,
-    partnerType: enquiry.kind === "partnership" ? enquiry.partnerType : undefined,
-    message: enquiry.message.trim(),
-    source: "kstone-projects-website",
-  };
+  const payload = buildEnquiryPayload(enquiry);
 
+  if (gmailSmtpConfigured()) {
+    await sendEnquiryViaGmail(payload);
+    return "sent";
+  }
+
+  const webhook = process.env.ENQUIRY_WEBHOOK_URL?.trim();
   if (webhook) {
     const res = await fetch(webhook, {
       method: "POST",
@@ -51,7 +39,7 @@ async function deliver(enquiry: EnquiryFields): Promise<"sent" | "logged" | "unc
   }
 
   if (process.env.NODE_ENV !== "production") {
-    console.info("[enquiry] (dev — not delivered anywhere)\n", payload);
+    console.info("[enquiry] (dev — not delivered; set GMAIL_* in .env.local to test email)\n", payload);
     return "logged";
   }
   return "unconfigured";
@@ -97,7 +85,7 @@ export async function POST(request: Request) {
   try {
     const result = await deliver(enquiry);
     if (result === "unconfigured") {
-      console.error("[enquiry] No delivery channel configured. Set ENQUIRY_WEBHOOK_URL.");
+      console.error("[enquiry] No delivery channel configured. Set GMAIL_USER + GMAIL_APP_PASSWORD (see .env.example).");
       return json(
         {
           ok: false,
