@@ -3,13 +3,9 @@ import { LinkedinIcon } from "@/components/ui/BrandIcons";
 import { ceo, site } from "@/data/site";
 import { cn } from "@/lib/cn";
 
-/**
- * LinkedIn call-to-action. Until `site.social.linkedinCeo` is set in
- * src/data/site.ts, it renders as a clearly-marked placeholder rather than
- * linking to a guessed URL.
- */
+/** Links to the CEO profile when set; otherwise the company LinkedIn page. */
 export function LinkedInCTA({ className }: { className?: string }) {
-  const href = site.social.linkedinCeo;
+  const href = site.social.linkedinCeo ?? site.social.linkedinCompany;
   const classes = cn(
     "group/btn inline-flex h-14 items-center gap-3 bg-white px-7 font-ui text-base font-semibold text-navy transition-colors",
     href ? "hover:bg-arch" : "cursor-not-allowed opacity-80",

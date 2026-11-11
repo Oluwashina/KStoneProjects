@@ -54,6 +54,8 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
+const orgSameAs = [site.social.linkedinCompany, site.social.instagram].filter(Boolean) as string[];
+
 const jsonLd = {
   "@context": "https://schema.org",
   "@graph": [
@@ -82,7 +84,7 @@ const jsonLd = {
             })),
           }
         : {}),
-      ...(site.social.linkedinCompany ? { sameAs: [site.social.linkedinCompany] } : {}),
+      ...(orgSameAs.length ? { sameAs: orgSameAs } : {}),
     },
     {
       "@type": "Person",
@@ -91,6 +93,7 @@ const jsonLd = {
       jobTitle: "Chief Executive Officer",
       worksFor: { "@id": `${site.url}/#organization` },
       alumniOf: "Ladoke Akintola University of Technology (LAUTECH)",
+      ...(ceo.portrait ? { image: `${site.url}${ceo.portrait}` } : {}),
       ...(site.social.linkedinCeo ? { sameAs: [site.social.linkedinCeo] } : {}),
     },
   ],

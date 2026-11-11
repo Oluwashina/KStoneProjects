@@ -265,10 +265,8 @@ export default function HomePage() {
         <div className="container-x">
           <div className="grid items-center gap-14 lg:grid-cols-12 lg:gap-20">
             <div className="lg:col-span-5">
-              <Reveal variant="image" className="relative aspect-[4/5] overflow-hidden">
-                <div className="img-reveal-inner absolute inset-0">
-                  <PortraitFrame className="absolute inset-0" />
-                </div>
+              <Reveal variant="fade">
+                <PortraitFrame priority className="aspect-[4/5] w-full" />
               </Reveal>
             </div>
             <div className="lg:col-span-7">

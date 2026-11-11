@@ -34,11 +34,9 @@ export const site = {
   },
 
   social: {
-    /** Company LinkedIn page URL */
-    linkedinCompany: null as string | null,
-    /** Engr. Salami Kabiru Ayobami personal LinkedIn profile URL */
-    linkedinCeo: null as string | null,
-    instagram: null as string | null,
+    linkedinCompany: "https://www.linkedin.com/in/kstone-projects-limited-68799a44a/",
+    linkedinCeo: "https://www.linkedin.com/in/salami-kabiru-690121214/",
+    instagram: "https://www.instagram.com/kstoneprojectslimited_01/",
     x: null as string | null,
     facebook: null as string | null,
   },
@@ -49,8 +47,7 @@ export const ceo = {
   shortName: "Engr. Kabiru",
   title: "Civil Engineer | Entrepreneur | Infrastructure Development",
   position: "Chief Executive Officer, Kstone Projects Limited",
-  /** Drop a portrait in /public/images/leadership/ and set the path here. */
-  portrait: null as string | null,
+  portrait: "/images/leadership/engr-salami-kabiru-ayobami.jpg",
 } as const;
 
 export const navigation = [
