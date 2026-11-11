@@ -1,4 +1,5 @@
-import { MapPin } from "lucide-react";
+import Link from "next/link";
+import { ArrowUpRight, MapPin } from "lucide-react";
 import { Logo } from "@/components/layout/Logo";
 import { Photo } from "@/components/ui/Photo";
 import { Reveal } from "@/components/ui/Reveal";
@@ -12,39 +13,56 @@ type CardProps = { delay?: number; className?: string; aspect?: string; sizes: s
 /** A verified project from src/data/projects.ts. */
 export function ProjectCard({ project, delay, className, aspect = "aspect-[4/3]", sizes }: CardProps & { project: Project }) {
   const lead = project.images[0];
+  const photoCount = project.images.length;
   return (
     <Reveal delay={delay} className={className}>
       <article className="group">
-        <div className={cn("overflow-hidden", aspect, "relative")}>
-          {lead && (
-            <Photo
-              image={lead}
-              sizes={sizes}
-              className="absolute inset-0"
-              imgClassName="transition-transform duration-[1200ms] ease-out group-hover:scale-105"
-            />
-          )}
-          <span className="absolute left-4 top-4 bg-white px-3 py-1.5 font-ui text-xs font-semibold uppercase tracking-[0.14em] text-navy">
-            {project.status}
-          </span>
-        </div>
-        <div className="mt-6">
-          <p className="eyebrow !text-[0.6875rem]">{categoryLabel(project.category)}</p>
-          <h3 className="h3 mt-3">{project.title}</h3>
-          <p className="mt-2 flex items-center gap-2 font-ui text-sm text-slate">
-            <MapPin className="size-4" aria-hidden /> {project.location}
-          </p>
-          <p className="mt-4 text-slate">{project.overview}</p>
-          {project.scope.length > 0 && (
-            <ul className="mt-4 flex flex-wrap gap-2">
-              {project.scope.map((s) => (
-                <li key={s} className="border border-line px-3 py-1 font-ui text-xs text-graphite">
-                  {s}
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
+        <Link href={`/projects/${project.slug}`} className="block focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand">
+          <div className={cn("overflow-hidden", aspect, "relative")}>
+            {lead && (
+              <Photo
+                image={lead}
+                sizes={sizes}
+                className="absolute inset-0"
+                imgClassName="transition-transform duration-[1200ms] ease-out group-hover:scale-105"
+              />
+            )}
+            <span className="absolute left-4 top-4 bg-white px-3 py-1.5 font-ui text-xs font-semibold uppercase tracking-[0.14em] text-navy">
+              {project.status}
+            </span>
+            {photoCount > 1 ? (
+              <span className="absolute bottom-4 right-4 bg-navy/80 px-3 py-1.5 font-ui text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-white backdrop-blur">
+                {photoCount} photos
+              </span>
+            ) : null}
+          </div>
+          <div className="mt-6">
+            <p className="eyebrow !text-[0.6875rem]">{categoryLabel(project.category)}</p>
+            <h3 className="h3 mt-3 flex items-start justify-between gap-3">
+              <span>{project.title}</span>
+              <ArrowUpRight
+                className="mt-1.5 size-5 shrink-0 text-brand opacity-0 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:opacity-100"
+                aria-hidden
+              />
+            </h3>
+            <p className="mt-2 flex items-center gap-2 font-ui text-sm text-slate">
+              <MapPin className="size-4" aria-hidden /> {project.location}
+            </p>
+            <p className="mt-4 line-clamp-3 text-slate">{project.overview}</p>
+            {project.scope.length > 0 && (
+              <ul className="mt-4 flex flex-wrap gap-2">
+                {project.scope.slice(0, 3).map((s) => (
+                  <li key={s} className="border border-line px-3 py-1 font-ui text-xs text-graphite">
+                    {s}
+                  </li>
+                ))}
+                {project.scope.length > 3 ? (
+                  <li className="px-1 py-1 font-ui text-xs text-slate">+{project.scope.length - 3} more</li>
+                ) : null}
+              </ul>
+            )}
+          </div>
+        </Link>
       </article>
     </Reveal>
   );

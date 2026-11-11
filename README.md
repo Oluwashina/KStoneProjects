@@ -28,7 +28,8 @@ plus `/api/enquiry`, `sitemap.xml`, `robots.txt`, Open Graph/Twitter images and 
 
 ### Adding a project
 Add an object to `projects` in `src/data/projects.ts` (title, location, category, overview, scope, status, images).
-Placeholders disappear automatically for any category that has real entries.
+Put JPEGs in `public/images/projects/`. Each project has a detail page at `/projects/[slug]` with a photo gallery.
+Optional site video: add MP4/WebM under `public/videos/projects/` and list it in the project’s `videos[]` array.
 
 ### Setting the CEO portrait
 Put the photo in `public/images/leadership/` and set `ceo.portrait` in `src/data/site.ts`.

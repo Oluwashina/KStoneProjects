@@ -233,9 +233,15 @@ export default function HomePage() {
             align="split"
             eyebrow="Featured projects"
             title={
-              <>
-                A portfolio in <span className="serif-accent text-[1.06em]">preparation.</span>
-              </>
+              featured.length ? (
+                <>
+                  Engineering work in <span className="serif-accent text-[1.06em]">progress.</span>
+                </>
+              ) : (
+                <>
+                  A portfolio in <span className="serif-accent text-[1.06em]">preparation.</span>
+                </>
+              )
             }
             intro={
               featured.length

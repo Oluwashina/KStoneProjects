@@ -61,7 +61,6 @@ export default function ContactPage() {
               <Reveal delay={150}>
                 <h3 className="ui-label uppercase tracking-[0.16em] text-brand">Connect</h3>
                 <SocialList tone="light" className="mt-4" />
-                <p className="mt-3 font-ui text-xs text-slate">LinkedIn and other social accounts — links to be added.</p>
               </Reveal>
 
               <Reveal delay={200} className="border-t border-line pt-8">

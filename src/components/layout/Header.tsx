@@ -2,24 +2,33 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { Suspense, useCallback, useEffect, useRef, useState } from "react";
 import { Menu, X, ArrowRight } from "lucide-react";
 import { navigation, site } from "@/data/site";
 import { cn } from "@/lib/cn";
 import { Logo } from "./Logo";
 import { Button } from "@/components/ui/Button";
+import { HeaderFallback } from "./HeaderFallback";
 
 /** Routes whose first screen is a dark photographic hero (header starts transparent). */
 const HERO_ROUTES = new Set(["/", "/about", "/services", "/projects", "/leadership", "/partnerships", "/contact"]);
 
 export function Header() {
+  return (
+    <Suspense fallback={<HeaderFallback />}>
+      <HeaderNav />
+    </Suspense>
+  );
+}
+
+function HeaderNav() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const toggleRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
 
-  const hasHero = HERO_ROUTES.has(pathname);
+  const hasHero = HERO_ROUTES.has(pathname) || pathname.startsWith("/projects/");
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);

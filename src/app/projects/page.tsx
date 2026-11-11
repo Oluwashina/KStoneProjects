@@ -23,7 +23,11 @@ export default function ProjectsPage() {
             A portfolio built on <span className="serif-accent text-[1.06em]">verified work.</span>
           </>
         }
-        intro="Browse by discipline. Only real, approved projects will appear here — until then, each category shows how its projects will be presented."
+        intro={
+          projects.length > 0
+            ? "Browse Kstone Projects by discipline. Select a project for photography, scope and status."
+            : "Browse by discipline. Only real, approved projects will appear here — until then, each category shows how its projects will be presented."
+        }
       />
 
       <section aria-labelledby="portfolio-heading" className="bg-white py-20 md:py-28">
@@ -36,8 +40,9 @@ export default function ProjectsPage() {
               </h2>
             </div>
             <p className="lead lg:col-span-5">
-              We would rather show a small number of well-documented projects than a long list we cannot stand behind.
-              Project records, scope and photography will be added as they are verified.
+              {projects.length > 0
+                ? "We publish a focused set of well-documented projects — each with verified photography, scope and status. More records will follow as they are approved."
+                : "We would rather show a small number of well-documented projects than a long list we cannot stand behind. Project records, scope and photography will be added as they are verified."}
             </p>
           </Reveal>
           <ProjectsExplorer projects={projects} />

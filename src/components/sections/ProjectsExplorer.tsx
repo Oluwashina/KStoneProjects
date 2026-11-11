@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { ProjectCard, ProjectPlaceholderCard } from "./ProjectCard";
+import { ProjectCard } from "./ProjectCard";
 import { Reveal } from "@/components/ui/Reveal";
 import { Button } from "@/components/ui/Button";
 import { projectCategories, projectFields, type Project, type ProjectCategoryId } from "@/data/projects";
@@ -38,19 +38,34 @@ function RecordStructure({ className }: { className?: string }) {
   );
 }
 
-export function ProjectsExplorer({ projects }: { projects: Project[] }) {
+export function ProjectsExplorer({ projects: projectsProp }: { projects: Project[] }) {
+  const projects = projectsProp;
   const [filter, setFilter] = useState<Filter>("all");
 
   const real = useMemo(() => (filter === "all" ? projects : projects.filter((p) => p.category === filter)), [filter, projects]);
   const activeLabel = filter === "all" ? "All projects" : projectCategories.find((c) => c.id === filter)!.label;
 
-  const placeholders: ProjectCategoryId[] =
-    filter === "all" ? ["roads-highways", "bridges-infrastructure", "marine-coastal", "buildings-structures"] : [filter];
+  const categoriesWithProjects = useMemo(() => {
+    const ids = new Set(projects.map((p) => p.category));
+    return projectCategories.filter((c) => ids.has(c.id));
+  }, [projects]);
+
+  const filterOptions =
+    projects.length > 0
+      ? [{ id: "all" as const, label: "All projects" }, ...categoriesWithProjects]
+      : [{ id: "all" as const, label: "All projects" }, ...projectCategories];
+
+  const statusMessage =
+    real.length > 0
+      ? `${real.length} ${real.length === 1 ? "project" : "projects"} · ${activeLabel}`
+      : projects.length > 0
+        ? `${activeLabel} · No projects in this category yet`
+        : `${activeLabel} · Portfolio records in preparation`;
 
   return (
     <div>
       <div role="group" aria-label="Filter projects by category" className="flex flex-wrap gap-2">
-        {[{ id: "all" as const, label: "All projects" }, ...projectCategories].map((c) => {
+        {filterOptions.map((c) => {
           const active = filter === c.id;
           return (
             <button
@@ -70,42 +85,39 @@ export function ProjectsExplorer({ projects }: { projects: Project[] }) {
       </div>
 
       <p className="mt-6 font-ui text-sm text-slate" role="status" aria-live="polite">
-        {real.length > 0
-          ? `${real.length} ${real.length === 1 ? "project" : "projects"} · ${activeLabel}`
-          : `${activeLabel} · No projects published yet — placeholders shown`}
+        {statusMessage}
       </p>
 
       <div key={filter} className="mt-10 grid gap-x-6 gap-y-16 lg:grid-cols-12">
-        {real.length > 0
-          ? real.map((p, i) => (
-              <ProjectCard
-                key={p.slug}
-                project={p}
-                delay={(i % 2) * 100}
-                className={spans[i % spans.length]}
-                aspect={aspects[i % aspects.length]}
-                sizes="(min-width: 1024px) 58vw, 100vw"
-              />
-            ))
-          : (
-            <>
-              {placeholders.map((c, i) => (
-                <ProjectPlaceholderCard
-                  key={c}
-                  category={c}
-                  index={i + 1}
-                  delay={(i % 2) * 100}
-                  className={filter === "all" ? spans[i % spans.length] : "lg:col-span-7"}
-                  aspect={filter === "all" ? aspects[i % aspects.length] : "aspect-[4/3] lg:aspect-[16/11]"}
-                  sizes="58vw"
-                />
-              ))}
-              <RecordStructure className={filter === "all" ? "lg:col-span-12" : "lg:col-span-5"} />
-            </>
-          )}
+        {real.length > 0 ? (
+          real.map((p, i) => (
+            <ProjectCard
+              key={p.slug}
+              project={p}
+              delay={(i % 2) * 100}
+              className={spans[i % spans.length]}
+              aspect={aspects[i % aspects.length]}
+              sizes="(min-width: 1024px) 58vw, 100vw"
+            />
+          ))
+        ) : projects.length === 0 ? (
+          <RecordStructure className="lg:col-span-12" />
+        ) : (
+          <p className="lg:col-span-12 text-slate">
+            Nothing published under this discipline yet. View{" "}
+            <button
+              type="button"
+              onClick={() => setFilter("all")}
+              className="font-semibold text-brand underline-offset-4 hover:underline"
+            >
+              all projects
+            </button>{" "}
+            or contact us for reference work.
+          </p>
+        )}
       </div>
 
-      {real.length === 0 && (
+      {real.length === 0 && projects.length === 0 && (
         <div className="mt-16 flex flex-col items-start gap-5 border-t border-line pt-10 sm:flex-row sm:items-center sm:justify-between">
           <p className="max-w-xl text-slate">
             Need project information for a tender, pre-qualification or partnership discussion? Get in touch and we will
