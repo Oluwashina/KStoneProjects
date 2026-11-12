@@ -47,7 +47,7 @@ export const serviceCategories: ServiceCategory[] = [
     short: "Marine & Coastal",
     intro:
       "Waterfront and coastal works that demand careful design, robust materials and disciplined execution in demanding environments.",
-    image: "shoreProtection",
+    image: "marineKspWelding",
   },
   {
     id: "building-structural",

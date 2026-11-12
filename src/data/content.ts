@@ -24,7 +24,7 @@ export const sectors: {
     description:
       "Jetties, waterfront structures and shore protection engineered for demanding coastal conditions.",
     points: ["Marine infrastructure", "Jetty construction", "Shore protection"],
-    image: "port",
+    image: "marineKspWelding",
     href: "/services#marine-coastal",
   },
   {

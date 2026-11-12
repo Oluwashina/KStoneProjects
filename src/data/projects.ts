@@ -69,9 +69,16 @@ export const projects: Project[] = [
     status: "In progress",
     images: [
       pj(
-        "marine-welding-supervision.jpg",
-        "Site engineer in high-visibility vest supervising welding on a steel pile above open water",
-        950,
+        "marine-welding-ksp-team.jpg",
+        "Kstone Projects site engineer in branded high-visibility vest supervising pile welding on a marine working platform",
+        882,
+        1024,
+        "50% 40%",
+      ),
+      pj(
+        "marine-piling-ksp-supervision.jpg",
+        "Kstone Projects engineer overseeing piling plant operations on a coastal construction site",
+        936,
         1024,
         "50% 35%",
       ),

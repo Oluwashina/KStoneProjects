@@ -70,6 +70,21 @@ export const images = {
     1996,
     "50% 45%",
   ),
+  /** Kstone Projects — marine & coastal (site photography) */
+  marineKspWelding: img(
+    "projects/marine-welding-ksp-team.jpg",
+    "Kstone Projects site engineer supervising steel pile welding above open water",
+    882,
+    1024,
+    "50% 40%",
+  ),
+  marineKspPiling: img(
+    "projects/marine-piling-ksp-supervision.jpg",
+    "Kstone Projects engineer overseeing piling operations beside marine foundation works",
+    936,
+    1024,
+    "50% 35%",
+  ),
   jetty: img(
     "marine-pier.jpg",
     "A timber-decked pier extending in perspective into open water",
