@@ -96,12 +96,6 @@ export const projects: Project[] = [
         1024,
       ),
       pj(
-        "marine-deck-rebar-team.jpg",
-        "Engineers in hard hats on a rebar deck mat above the waterline at a waterfront site",
-        720,
-        960,
-      ),
-      pj(
         "marine-pier-concrete-slab.jpg",
         "Freshly poured concrete pier deck supported on piles above calm water under overcast skies",
         850,
